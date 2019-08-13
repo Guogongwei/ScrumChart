@@ -1,0 +1,7 @@
+node_modules/
+uwsgi.sock
+__pycache__/
+.vscode/
+yarn.lock
+--ini
+venv/

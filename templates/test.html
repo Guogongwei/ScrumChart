@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container" style="width: 800px;margin: auto;height: 600px;"></div>
+
+    <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script>
+        defaults = [24000, 49200.0, 75660.0, 103443.0, 132615.15, 163245.9, 195408.2, 229178.6, 264637.5, 301869.4, 340962.8, 382011.0, 425111.5, 470367.1, 517885.5, 567779.8, 620168.7, 675177.2, 732936.0, 793582.8]
+        var fact = function (base, n, rate) {
+            if (n == 1) {
+                return base
+            }
+            return base + fact(base, n-1, rate)*rate
+        }
+
+        defaults = []
+        for (let i = 1; i < 31; i++) {
+            var num = fact(100000, i, 1.05)
+            num = num.toFixed(2)
+            defaults.push(parseFloat(num))
+        }
+
+        var options = {
+            chart: {
+            type: 'spline'
+            },
+            title: {
+                text: ''
+            },
+            legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+            },
+            xAxis: {
+                title: {
+                    text: '日期'
+                },
+                categories: []
+            },
+            yAxis: {
+                title: {
+                    text: 'SP'
+                }
+            },
+            series: [{
+                name: '标准线',
+                data: defaults,
+                dashStyle: 'shortDot',
+            }, {
+                name: '实际线',
+                data: []
+            }]
+        };
+        var chart = Highcharts.chart('container', options);
+    </script>
+</body>
+</html>

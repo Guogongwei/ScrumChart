@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/codeages-design.css">
+  </head>
+  <body>
+
+    <div class="cd-content">
+      <div class="cd-sidebar">
+        <ul class="cd-sidebar__list">
+            <li class="cd-sidebar__heading">日常迭代</li>
+            <li class="cd-sidebar__item"><a href="#">0902</a></li>
+        </ul>
+      </div>
+      <div class="cd-main">
+        <div class="cd-main__heading">
+          <div class="cd-main__title">燃尽图</div>
+        </div>
+        <div class="cd-main__body">
+          <div id="chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="http://cdn.highcharts.com.cn/highcharts/highcharts.js"></script>
+    <script async defer>
+
+      var date = {{source.dates|tojson}}
+      var defaults = {{source.stand_values}}
+      var actual_values = {{source.actual_values}}
+
+      var options = {
+        chart: {
+          type: 'spline'
+        },
+        title: {
+            text: '日常迭代燃尽图'
+        },
+        legend: {
+          layout: 'vertical',
+          align: 'right',
+          verticalAlign: 'middle',
+          borderWidth: 0
+        },
+        xAxis: {
+            title: {
+                text: '日期'
+            },
+            categories: date
+        },
+        yAxis: {
+            title: {
+                text: 'SP'
+            }
+        },
+        series: [{
+            name: '标准线',
+            data: defaults,
+            dashStyle: 'shortDot',
+        }, {
+            name: '实际线',
+            data: actual_values
+        }]
+    };
+    var chart = Highcharts.chart('chart', options);
+    </script>
+  </body>
+</html>
