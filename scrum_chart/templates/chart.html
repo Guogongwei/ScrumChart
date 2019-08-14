@@ -5,7 +5,7 @@
       <ul class="cd-sidebar__list">
           <li class="cd-sidebar__heading">日常迭代</li>
           {% for scrum in scrums %}
-            <li class="cd-sidebar__item {% if scrum.No == request.args.get('scrum_No') %} active {% endif%}"><a href="{{url_for('index', scrum_No=scrum.No)}}">{{ scrum.No }}</a></li>
+            <li class="cd-sidebar__item {% if scrum.No == request.args.get('scrum_No') %} active {% endif%}"><a href="{{url_for('chart', scrum_No=scrum.No)}}">{{ scrum.No }}</a></li>
           {% endfor %}
       </ul>
     </div>

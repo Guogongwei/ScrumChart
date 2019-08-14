@@ -5,8 +5,11 @@ from flask import Flask, request, session, g, render_template
 app = Flask(__name__)
 app.config.from_object('config')
 
+from scrum_chart.database import Scrum, db
+
 @app.route('/')
-def homepage():
+def index():
+    scrums = Scrum.query.all()
     total = request.args.get('total', 0)
     start = request.args.get('start', '2019-07-01')
     start = datetime.datetime.strptime(start, '%Y-%m-%d')
@@ -16,14 +19,30 @@ def homepage():
     stand_line = get_stand_line_value(start, end, total, days)
 
     actual_values = request.args.get('actual', [])
-    print (actual_values)
 
     source = {
         'dates': stand_line[1],
         'stand_values':stand_line[0],
         'actual_values': actual_values
     }
-    return render_template('index.html', source = source)
+    return render_template('index.html',
+        source = source,
+        scrums = scrums
+    )
+
+@app.route('/chart')
+def chart():
+    scrums = Scrum.query.all()
+    source = {
+        'dates': [],
+        'stand_values':[],
+        'actual_values': []
+    }
+
+    return render_template('chart.html',
+        source = source,
+        scrums = scrums
+    )
 
 def calc_days(start_date, end_date):
     days = 0
@@ -50,3 +69,4 @@ def get_stand_line_value(start_date, end_date, total, days):
         tag += datetime.timedelta(days=1)
 
     return [stand_value, dates]
+

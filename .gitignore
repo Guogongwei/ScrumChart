@@ -5,3 +5,4 @@ __pycache__/
 yarn.lock
 --ini
 venv/
+config.py
