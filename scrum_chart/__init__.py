@@ -1,13 +1,9 @@
-# all the imports
-import os
-import sqlite3
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash
 import datetime
+from flask import Flask, request, session, g, render_template
 
-from flask import Flask
-
+# 加载 app 并添加基础配置
 app = Flask(__name__)
+app.config.from_object('config')
 
 @app.route('/')
 def homepage():
@@ -54,7 +50,3 @@ def get_stand_line_value(start_date, end_date, total, days):
         tag += datetime.timedelta(days=1)
 
     return [stand_value, dates]
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
