@@ -47,7 +47,13 @@
           title: {
               text: '日期'
           },
-          categories: date
+          labels: {
+            formatter: function() {
+              return date[this.value];
+            }
+          },
+          tickInterval:1
+          // categories: date
       },
       yAxis: {
           title: {

@@ -60,6 +60,8 @@ def getdataFromDb(scrum_No):
     scrum_sprints = ScrumSprint.query.filter_by(scrum_id = scrum.id).all()
     scrum_sprints = sorted(scrum_sprints, key = attrgetter('day'))
     actual_values = []
+    actual_values.append(scrum.total_sprint)
+
     for item in scrum_sprints:
         actual_values.append(item.left_sprint)
 
@@ -83,6 +85,7 @@ def get_stand_line_value(start_date, end_date, total, days):
     total = float(total)
     step = round((total / days), 2)
     stand_value = []
+    stand_value.append(total)
     dates = []
     while tag <= end_date:
         if tag.weekday() not in [6, 5]:
