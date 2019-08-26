@@ -12,7 +12,10 @@ class Scrum(db.Model):
     start_date = db.Column(db.String(255))
     end_date = db.Column(db.String(255))
 
-
+class Project(db.Model):
+    __tablename__ = 'project'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
 
 class ScrumSprint(db.Model):
     __tablename__ = 'scrum_sprint'

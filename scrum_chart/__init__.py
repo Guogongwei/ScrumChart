@@ -6,7 +6,7 @@ from operator import itemgetter, attrgetter
 app = Flask(__name__)
 app.config.from_object('config')
 
-from scrum_chart.database import db, Scrum, ScrumSprint
+from scrum_chart.database import db, Scrum, ScrumSprint, Project
 
 @app.route('/')
 def index():
@@ -18,7 +18,8 @@ def index():
 
     return render_template('index.html',
         source = source,
-        scrums = Scrum.query.all()
+        scrums = Scrum.query.all(),
+        projects = Project.query.all()
     )
 
 @app.route('/chart')
