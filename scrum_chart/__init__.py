@@ -2,7 +2,6 @@ import datetime
 from flask import Flask, request, session, g, render_template
 from operator import itemgetter, attrgetter
 
-# 加载 app 并添加基础配置
 app = Flask(__name__)
 app.config.from_object('config')
 
@@ -86,7 +85,7 @@ def get_stand_line_value(start_date, end_date, total, days):
     step = round((total / days), 2)
     stand_value = []
     stand_value.append(total)
-    dates = []
+    dates = [0]
     while tag <= end_date:
         if tag.weekday() not in [6, 5]:
             total = round(total - step, 2)
@@ -95,6 +94,8 @@ def get_stand_line_value(start_date, end_date, total, days):
         stand_value.append(total)
         dates.append(tag.strftime('%m-%d %A'))
         tag += datetime.timedelta(days=1)
+
+    # stand_value.append(total)
 
     return [stand_value, dates]
 
