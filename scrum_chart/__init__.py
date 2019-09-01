@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, request, session, g, render_template
+from flask import Flask, request, session, g, render_template, redirect, url_for
 from operator import itemgetter, attrgetter
 
 app = Flask(__name__)
@@ -9,29 +9,38 @@ from scrum_chart.database import db, Scrum, ScrumSprint, Project
 
 @app.route('/')
 def index():
-    scrum_No = request.args.get('scrum_No')
-    if scrum_No != None:
-        source = getdataFromDb(scrum_No)
+    scrum_id = request.args.get('scrum_id')
+    scrumList = None
+    if scrum_id != None:
+        source = getdataFromDb(scrum_id)
+        scrumList = ScrumSprint.query.filter_by(scrum_id = scrum_id).all()
     else:
         source = getdataFromQuery(request)
 
     return render_template('index.html',
         source = source,
         scrums = Scrum.query.all(),
-        projects = Project.query.all()
+        projects = Project.query.all(),
+        scrumList = scrumList
     )
 
-@app.route('/chart')
-def chart():
-    scrum_No = request.args.get('scrum_No')
-    source = {'dates': [], 'stand_values':[], 'actual_values': []}
-    if scrum_No != None:
-        source = getdataFromDb(scrum_No)
+@app.route('/sprint/update', methods=['POST'])
+def update():
+    scrum_id = request.form.get("scrum_id")
 
-    return render_template('chart.html',
-        source = source,
-        scrums = Scrum.query.all()
-    )
+    if scrum_id == None:
+        return redirect(url_for('index'))
+    scrum = Scrum.query.filter_by(id = scrum_id).first()
+    if scrum == None:
+        return redirect(url_for('index'))
+    if request.form['left_sprint'] == '' or request.form['day'] == '':
+        return redirect(url_for('index', scrum_id = scrum.id))
+
+    scrumSprint = ScrumSprint(scrum_id = scrum_id, day = request.form['day'], left_sprint = request.form['left_sprint'])
+    db.session.add(scrumSprint)
+    db.session.commit()
+
+    return redirect(url_for('index', scrum_id = scrum.id))
 
 def getdataFromQuery(request):
     total = request.args.get('total', 0)
@@ -50,8 +59,8 @@ def getdataFromQuery(request):
 
     return source
 
-def getdataFromDb(scrum_No):
-    scrum = Scrum.query.filter_by(No = scrum_No).first()
+def getdataFromDb(scrum_id):
+    scrum = Scrum.query.filter_by(id = scrum_id).first()
     start_date = datetime.datetime.strptime(scrum.start_date, '%Y-%m-%d')
     end_date = datetime.datetime.strptime(scrum.end_date, '%Y-%m-%d')
     days = calc_days(start_date, end_date)

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+  {% set currentId = request.args.get('scrum_id') %}
   <div class="cd-content">
     <div class="cd-sidebar">
       <ul class="cd-sidebar__list">
@@ -7,7 +8,8 @@
             <li class="cd-sidebar__heading">{{project.title}}</li>
             {% for scrum in scrums %}
               {% if scrum.project_id == project.id %}
-                <li class="cd-sidebar__item {% if scrum.No == request.args.get('scrum_No') %} active {% endif%}"><a href="{{url_for('index', scrum_No=scrum.No)}}">{{ scrum.No }}</a></li>
+                <li class="cd-sidebar__item
+                {% if scrum.id|string == request.args.get('scrum_id') %}active{% endif %}"><a href="{{url_for('index', scrum_id=scrum.id)}}">{{ scrum.No }}</a></li>
               {% endif %}
             {% endfor %}
           {% endfor %}
@@ -19,6 +21,46 @@
       </div>
       <div class="cd-main__body">
         <div id="chart"></div>
+        <form action="{{url_for('update', scrum_No=request.args.get('scrum_No'))}}" class="row cd-row" method="POST" style="margin-top: 30px">
+          <div class="col-md-3">
+            <div class="form-group cd-form-group">
+              <label for="day">日期</label>
+              <input type="text" id="day" name="day" class="form-control" value="" placeholder="2019-08-22" >
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group cd-form-group">
+              <label for="day">剩余点数</label>
+              <input type="text" id="left_sprint" name="left_sprint" class="form-control" value="" placeholder="" >
+            </div>
+          </div>
+          <div class="col-md-3">
+            <input type="text" name="scrum_id" class="hidden" value="{{currentId|default(None)}}">
+            <button class="btn cd-btn cd-btn-primary" type="submit" data-loading-tex="正在保存...">保存</button>
+          </div>
+        </form>
+        <div class="cd-table-responsive">
+          <table class="cd-table">
+            <thead>
+              <tr>
+                <th>编号</th>
+                <th>日期</th>
+                <th>剩余点数</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if scrumList != None %}
+                {% for item in scrumList %}
+                  <tr>
+                    <td>{{item.id}}</td>
+                    <td>{{item.day}}</td>
+                    <td>{{item.left_sprint}}</td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -35,7 +77,7 @@
         type: 'spline'
       },
       title: {
-          text: '日常迭代燃尽图'
+          text: ''
       },
       legend: {
         layout: 'vertical',
