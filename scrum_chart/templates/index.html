@@ -25,13 +25,13 @@
           <div class="col-md-3">
             <div class="form-group cd-form-group">
               <label for="day">日期</label>
-              <input type="text" id="day" name="day" class="form-control" value="" placeholder="2019-08-22" >
+              <input type="text" id="day" name="day" class="cd-form-control" value="" placeholder="2019-08-22" >
             </div>
           </div>
           <div class="col-md-3">
             <div class="form-group cd-form-group">
               <label for="day">剩余点数</label>
-              <input type="text" id="left_sprint" name="left_sprint" class="form-control" value="" placeholder="" >
+              <input type="text" id="left_sprint" name="left_sprint" class="cd-form-control" value="" placeholder="" >
             </div>
           </div>
           <div class="col-md-3">
@@ -46,6 +46,7 @@
                 <th>编号</th>
                 <th>日期</th>
                 <th>剩余点数</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +56,10 @@
                     <td>{{item.id}}</td>
                     <td>{{item.day}}</td>
                     <td>{{item.left_sprint}}</td>
+                    <td>
+                      <button class="btn cd-btn cd-btn-info cd-btn-sm">修改</button>
+                      <button class="btn cd-btn cd-btn-info cd-btn-sm">删除</button>
+                    </td>
                   </tr>
                 {% endfor %}
               {% endif %}
