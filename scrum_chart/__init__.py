@@ -1,6 +1,8 @@
 import datetime
 from flask import Flask, request, session, g, render_template, redirect, url_for
 from operator import itemgetter, attrgetter
+import pymysql
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -24,8 +26,8 @@ def index():
         scrumList = scrumList
     )
 
-@app.route('/sprint/update', methods=['POST'])
-def update():
+@app.route('/sprint/add', methods=['POST'])
+def addSprint():
     scrum_id = request.form.get("scrum_id")
 
     if scrum_id == None:
@@ -41,6 +43,29 @@ def update():
     db.session.commit()
 
     return redirect(url_for('index', scrum_id = scrum.id))
+
+@app.route('/sprint/update', methods=['POST'])
+def updateSprint():
+    scrum_id = request.form.get("scrum_id")
+    if scrum_id == None:
+        return redirect(url_for('index'))
+
+    scrum = Scrum.query.filter_by(id = scrum_id).first()
+    if scrum == None:
+        return redirect(url_for('index'))
+
+    sprint_id = request.form.get("sprint_id")
+    if sprint_id == None:
+        return redirect(url_for('index', scrum_id = scrum.id))
+
+    if request.form['left_sprint'] == '':
+        return redirect(url_for('index', scrum_id = scrum.id))
+
+    scrumSprint = ScrumSprint.query.filter_by(id = sprint_id).first()
+    scrumSprint.left_sprint = request.form['left_sprint']
+    db.session.commit()
+
+    return 'true'
 
 def getdataFromQuery(request):
     total = request.args.get('total', 0)
