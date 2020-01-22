@@ -1,8 +1,6 @@
 import datetime
 from flask import Flask, request, session, g, render_template, redirect, url_for
 from operator import itemgetter, attrgetter
-import pymysql
-pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.config.from_object('config')

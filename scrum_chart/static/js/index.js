@@ -19,7 +19,6 @@ class Scrum{
     }
 
     updatePost(event) {
-        console.log(12121);
         let $target = $(event.currentTarget);
         console.log($target.data('id'));
         let data = {
