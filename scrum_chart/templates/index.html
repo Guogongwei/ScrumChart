@@ -21,7 +21,7 @@
       </div>
       <div class="cd-main__body">
         <div id="chart"></div>
-        <form action="{{url_for('update', scrum_No=request.args.get('scrum_No'))}}" class="row cd-row" method="POST" style="margin-top: 30px">
+        <form action="{{url_for('addSprint', scrum_No=request.args.get('scrum_No'))}}" class="row cd-row" method="POST" style="margin-top: 30px">
           <div class="col-md-3">
             <div class="form-group cd-form-group">
               <label for="day">日期</label>
@@ -53,11 +53,14 @@
               {% if scrumList != None %}
                 {% for item in scrumList %}
                   <tr>
-                    <td>{{item.id}}</td>
+                    <td class="item-id">{{item.id}}</td>
                     <td>{{item.day}}</td>
-                    <td>{{item.left_sprint}}</td>
+                    <td class="point-item">{{item.left_sprint}}</td>
+                    <td class="hidden point-input">
+                      <input type="text" id="point" name="left_point" class="cd-form-control point-input" value="{{item.left_sprint}}" data-url="{{url_for('updateSprint')}}" data-id="{{currentId}}">
+                    </td>
                     <td>
-                      <button class="btn cd-btn cd-btn-info cd-btn-sm">修改</button>
+                      <button class="btn cd-btn cd-btn-info cd-btn-sm update-scrum">修改</button>
                       <button class="btn cd-btn cd-btn-info cd-btn-sm">删除</button>
                     </td>
                   </tr>
@@ -118,4 +121,5 @@
   };
   var chart = Highcharts.chart('chart', options);
   </script>
+  <script src="../static/js/index.js"></script>
 {% endblock %}
